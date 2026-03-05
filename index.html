@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the Kurti Atelier</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://img.freepik.com/premium-vector/shopping-logo-vector-icon_636116-200.jpg?semt=ais_hybrid&w=740&q=80"> 
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-top">
+            <div style="display: flex; align-items: center;">
+                <div class="home-trigger" onclick="filterProducts('HOME')">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </div>
+                <h1 class="logo" onclick="filterProducts('HOME')">The<span>Kurti Atelier</span></h1>
+            </div>
+            
+            <div class="header-icons">
+                <div class="search-trigger icon-btn" onclick="toggleSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="wishlist-wrapper" onclick="window.location.href='wishlist.html'">
+                    <i id="mainWishIcon" class="fa-regular fa-heart icon-btn"></i>
+                    <span id="wishBadge" class="wish-badge" style="display:none;">0</span>
+                </div>
+                <div class="cart-wrapper" onclick="window.location.href='cart.html'">
+                    <i class="fa-solid fa-bag-shopping icon-btn"></i>
+                    <span id="cartBadgeIndex" class="cart-badge" style="display:none;">0</span>
+                </div>
+                <i class="fa-solid fa-bars-staggered icon-btn" onclick="toggleDropdown(event)"></i>
+                
+                <div id="menuDropdown" class="dropdown-menu">
+                    <a href="#" onclick="filterProducts('HOME')"><i class="fa-solid fa-shop"></i> Main Collection</a>
+                    <a href="wishlist.html"><i class="fa-solid fa-heart"></i> My Favorites</a>
+                    <a href="https://wa.me/917851053736"><i class="fa-solid fa-headset"></i> Contact Support</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-overlay" id="searchBar">
+            <div class="search-bar-inner">
+                <input type="text" id="searchInput" placeholder="Search product..." oninput="searchProduct()">
+                <i class="fa-solid fa-xmark" onclick="toggleSearch()" style="cursor:pointer;"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-banner">
+        <div class="hero-content">
+            <p class="hero-subtext">The Art of Tradition</p>
+            <h2 class="hero-title">Timeless <span>Elegance</span></h2>
+            <button class="hero-btn" onclick="document.getElementById('category-section').scrollIntoView({behavior:'smooth'})">Explore Now</button>
+        </div>
+    </section>
+
+    <section class="category-section" id="category-section">
+        <div class="category-container">
+            <div class="cat-card" id="cat-SAREE" onclick="filterProducts('SAREE')">
+                <div class="cat-img-box">
+                    <img src="https://i.pinimg.com/736x/91/25/b4/9125b4293e92ec942e0d8cb4b5d7b806.jpg" alt="Saree">
+                </div>
+                <p>Saree</p>
+            </div>
+            <div class="cat-card" id="cat-KURTIS" onclick="filterProducts('KURTIS')">
+                <div class="cat-img-box">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmG2YSFD_Mc6bBBNV9TVMihhLI2FOKAhMEqw&s" alt="Kurtis">
+                </div>
+                <p>Kurtis & Dress</p>
+            </div>
+            <div class="cat-card" id="cat-GIFT" onclick="filterProducts('GIFT')">
+                <div class="cat-img-box">
+                    <img src="https://www.happygifts.in/storage/bundles/WDBAVaQf19geEwAdktWBjVC4Y3Xb718Q1vjFBfAy.webp" alt="Gifts">
+                </div>
+                <p>Exclusive Gifts</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="feed-section">
+        <div class="section-heading">
+            <h3 id="feedTitle">Premium Collection</h3>
+        </div>
+        <main id="productDisplay" class="product-grid">
+            <div class="loader-box">
+                <i class="fa-solid fa-ellipsis fa-fade" style="font-size:30px; color:#d4af37;"></i>
+                <p style="margin-top:10px; font-size:12px; letter-spacing:1px;">Designing for you...</p>
+            </div>
+        </main>
+    </section>
+
+    <div class="wa-container">
+        <div class="wa-msg-pop">The Kurti Atelier</div>
+        <a href="https://wa.me/917851053736?text=I'm interested in your premium collection." 
+           class="whatsapp-modern" target="_blank">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIPMJkkNyixopJDKSmvkWcyfMjkhKAI4to5dC-8ot-cINWLlwXg4pLFmThXEtw-Q/exec"; 
+        let allProducts = [];
+
+        async function loadStoreData() {
+            try {
+                const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
+                const result = await response.json();
+                if (result.products) {
+                    allProducts = result.products.reverse();
+                    localStorage.setItem('myProducts', JSON.stringify(allProducts)); 
+                    filterProducts('HOME');
+                }
+            } catch (e) {
+                document.getElementById('productDisplay').innerHTML = '<p class="empty-msg">Unable to connect to server.</p>';
+            }
+            updateBadges();
+        }
+
+        function render(data) {
+            const grid = document.getElementById('productDisplay');
+            if(!data || data.length === 0) {
+                grid.innerHTML = '<p class="empty-msg">New designs arriving soon...</p>';
+                return;
+            }
+            
+            const offers = [30, 40, 50];
+
+            grid.innerHTML = data.map(p => {
+                const price = parseFloat(p.price) || 0;
+                const randomOffer = offers[Math.floor(Math.random() * offers.length)];
+                const oldPrice = Math.round(price / (1 - randomOffer/100));
+                const rating = (Math.random() * (4.9 - 4.2) + 4.2).toFixed(1);
+
+                return `
+                    <div class="p-card" onclick="openProduct(${p.id})">
+                        <div class="p-img-wrapper">
+                            <span class="p-offer-tag">${randomOffer}% OFF</span>
+                            <img src="${p.mainImg}" alt="${p.name}" loading="lazy">
+                        </div>
+                        <div class="p-details">
+                            <p class="p-name">${p.name}</p>
+                            <div class="p-rating">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                                <span class="rating-count">(${rating})</span>
+                            </div>
+                            <div class="p-price-row">
+                                <span class="p-price">₹${price}</span>
+                                <span class="p-old-price">₹${oldPrice}</span>
+                                <span class="p-discount-txt">${randomOffer}% OFF</span>
+                            </div>
+                            <p class="p-shipping">Free Shipping</p>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function filterProducts(category) {
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active-cat'));
+            const element = document.getElementById('cat-' + category);
+            if(element) element.classList.add('active-cat');
+            
+            let filtered;
+            let displayTitle;
+
+            if (category === 'HOME') {
+                filtered = allProducts;
+                displayTitle = "Premium Collection";
+            } else {
+                filtered = allProducts.filter(p => {
+                    const pCat = p.category ? p.category.toUpperCase() : "";
+                    if (category === 'KURTIS') {
+                        return pCat === 'KURTIS' || pCat.includes('DRESS');
+                    }
+                    if (category === 'GIFT') {
+                        return pCat === 'GIFT' || pCat.includes('GIFT');
+                    }
+                    return pCat === category;
+                });
+
+                if(category === 'SAREE') displayTitle = 'Premium Sarees';
+                else if(category === 'KURTIS') displayTitle = 'Kurtis & Dresses';
+                else if(category === 'GIFT') displayTitle = 'Exclusive Gifts';
+            }
+            
+            document.getElementById('feedTitle').innerText = displayTitle;
+            render(filtered);
+        }
+
+        function toggleSearch() {
+            document.getElementById('searchBar').classList.toggle('active');
+            if(document.getElementById('searchBar').classList.contains('active')) {
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        function searchProduct() {
+            const val = document.getElementById('searchInput').value.toLowerCase();
+            const searchRes = allProducts.filter(p => 
+                (p.name && p.name.toLowerCase().includes(val)) || 
+                (p.category && p.category.toLowerCase().includes(val))
+            );
+            render(searchRes);
+        }
+
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            document.getElementById('menuDropdown').classList.toggle('show');
+        }
+
+        function updateBadges() {
+            const cart = JSON.parse(localStorage.getItem('myCart')) || [];
+            const wish = JSON.parse(localStorage.getItem('myWishlist')) || [];
+            const cb = document.getElementById('cartBadgeIndex');
+            const wb = document.getElementById('wishBadge');
+            if(cb && cart.length > 0) { cb.innerText = cart.length; cb.style.display = 'flex'; }
+            if(wb && wish.length > 0) { wb.innerText = wish.length; wb.style.display = 'flex'; }
+        }
+
+        function openProduct(id) { window.location.href = `details.html?id=${id}`; }
+        window.onclick = () => { document.getElementById('menuDropdown').classList.remove('show'); };
+        window.onload = loadStoreData;
+    </script>
+</body>
+</html>
