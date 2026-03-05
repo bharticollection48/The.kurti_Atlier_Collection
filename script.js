@@ -1,72 +1,61 @@
 // --- 1. CONFIGURATION ---
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyIPMJkkNyixopJDKSmvkWcyfMjkhKAI4to5dC-8ot-cINWLlwXg4pLFmThXEtw-Q/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIPMJkkNyixopJDKSmvkWcyfMjkhKAI4to5dC-8ot-cINWLlwXg4pLFmThXEtw-Q/exec";
 
 let allProducts = [];
 let currentData = [];
 
 /**
- * Page load hote hi data mangwane ki koshish karein
+ * Page load hone par logic
  */
 window.onload = async () => {
-    // 1. Loader dikhao jab tak data load na ho
     const grid = document.getElementById('productDisplay');
-    if (grid) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:#9c27b0;"></i><p>Loading Products...</p></div>';
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:#f3047c;"></i><p>Loading Latest Collection...</p></div>';
 
-    // 2. Pehle LocalStorage se purana data dikhao (Instant feel ke liye)
+    // 1. LocalStorage se data load karein (Taki user ko wait na karna pade)
     const localData = localStorage.getItem('myProducts');
     if (localData) {
         try {
             allProducts = JSON.parse(localData);
             currentData = [...allProducts];
-            render(allProducts);
-        } catch(e) { console.log("Cache error"); }
+            render(allProducts); 
+        } catch(e) { console.error("Cache error"); }
     }
     
-    // 3. Phir Cloud se ekdum taaza data lao
+    // 2. Refresh fresh data from Cloud
     await refreshData();
 };
 
 /**
- * Google Sheets se Fresh Data Lane Ke Liye
+ * Google Sheets se Fresh Data Fetch karna
  */
 async function refreshData() {
     try {
-        // Cache busting: t=Date.now() browser ko naya data lane par majboor karta hai
         const fetchUrl = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
-        
         const response = await fetch(fetchUrl);
-        if (!response.ok) throw new Error("Server not responding");
-        
         const result = await response.json();
         
         let freshProducts = [];
 
-        // Admin Panel format check: { products: [], settings: {} }
         if (result.products && Array.isArray(result.products)) {
             freshProducts = result.products;
-            
-            // Sync UPI and Password to LocalStorage
             if(result.settings) {
                 localStorage.setItem('ghabaUPI', result.settings.upi);
                 localStorage.setItem('adminPassword', result.settings.password);
             }
-        } 
-        // Agar result sirf ek array hai
-        else if (Array.isArray(result)) {
+        } else if (Array.isArray(result)) {
             freshProducts = result;
         }
 
         if (freshProducts.length > 0) {
-            allProducts = freshProducts;
-            currentData = [...allProducts];
+            // --- 100% WORKING FIX ---
+            // Sheet mein naya product hamesha aakhri row mein hota hai.
+            // Hum use yahan 'reverse' kar denge taaki wo hamesha sabse upar dikhe.
+            allProducts = [...freshProducts].reverse(); 
             
-            // Store in LocalStorage for next visit
+            currentData = [...allProducts];
             localStorage.setItem('myProducts', JSON.stringify(allProducts));
             render(allProducts); 
-            console.log("Cloud Sync Successful. Total:", allProducts.length);
-        } else {
-            // Agar sheet khali hai
-            render([]);
+            console.log("New products are now at the top!");
         }
     } catch (error) {
         console.error("Sync Error:", error);
@@ -75,32 +64,24 @@ async function refreshData() {
 }
 
 /**
- * Render Function (Design & UI)
+ * UI Render Function
  */
 function render(data) {
     const grid = document.getElementById('productDisplay');
     if (!grid) return;
 
     if (!data || data.length === 0) {
-        grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #888;">
-                <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 10px; color: #ccc;"></i>
-                <h3>Stock Update Ho Raha Hai</h3>
-                <p>Kripya thodi der mein check karein ya refresh karein.</p>
-            </div>`;
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;"><h3>No Products Found</h3></div>`;
         return;
     }
 
     grid.innerHTML = '';
     
-    // Naye products hamesha upar dikhane ke liye reverse()
-    const displayData = [...data].reverse();
-
-    displayData.forEach(p => {
+    // Yahan hum loop direct chalayenge kyunki refreshData mein hi reverse kar diya hai
+    data.forEach(p => {
         const currentPrice = parseFloat(p.price) || 0;
-        const originalPrice = Math.round(currentPrice * 1.4);
+        const originalPrice = Math.round(currentPrice / 0.6); 
         
-        // Multiple fallback for images
         let imgPath = p.mainImg || p.img || (p.gallery && p.gallery[0]) || 'https://via.placeholder.com/300?text=No+Image';
 
         grid.innerHTML += `
@@ -116,19 +97,20 @@ function render(data) {
                     <div class="price-container">
                         <span class="main-price">₹${currentPrice}</span>
                         <span class="old-price">₹${originalPrice}</span>
-                        <span class="discount-badge">30% OFF</span>
+                        <span class="discount-badge">40% OFF</span>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px;">
-                         <span class="rating-pill">4.2 <i class="fa-solid fa-star" style="font-size: 8px;"></i></span>
-                        <span style="font-size: 11px; color: #00b894; font-weight:bold;">Free Delivery</span>
+                         <span class="rating-pill">4.5 <i class="fa-solid fa-star" style="font-size: 8px;"></i></span>
+                        <span style="font-size: 11px; color: #1aab2a; font-weight:bold;">Free Delivery</span>
                     </div>
                 </div>
             </div>`;
     });
 }
 
-// --- Filtering & UI Logic ---
-
+/**
+ * Filter & Search
+ */
 function searchProduct() {
     const val = document.getElementById('searchInput').value.toLowerCase();
     const filtered = allProducts.filter(p => 
@@ -146,9 +128,15 @@ function filterProducts(categoryName) {
 }
 
 function sortProducts(type) {
-    const sorted = [...currentData].sort((a, b) => 
-        type === 'low' ? a.price - b.price : b.price - a.price
-    );
+    let sorted = [...currentData];
+    if (type === 'low') {
+        sorted.sort((a, b) => a.price - b.price);
+    } else if (type === 'high') {
+        sorted.sort((a, b) => b.price - a.price);
+    } else {
+        // Default: Newest first
+        sorted = [...allProducts];
+    }
     render(sorted);
 }
 
@@ -158,15 +146,15 @@ function openProduct(id) {
 
 function updateCartBadge() {
     const badge = document.getElementById('cartBadgeIndex');
-    if (!badge) return;
-    let cart = JSON.parse(localStorage.getItem('myCart')) || [];
-    badge.innerText = cart.length;
-    badge.style.display = cart.length > 0 ? "block" : "none";
+    if (badge) {
+        let cart = JSON.parse(localStorage.getItem('myCart')) || [];
+        badge.innerText = cart.length;
+        badge.style.display = cart.length > 0 ? "block" : "none";
+    }
 }
 
 function addToWishlist(id) {
-    alert("Wishlist mein add ho gaya! ❤️");
+    alert("Added to wishlist! ❤️");
 }
 
-// Jab user doosre tab se wapas aaye toh data refresh karein
 window.onfocus = refreshData;
