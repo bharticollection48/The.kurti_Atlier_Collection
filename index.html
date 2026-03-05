@@ -105,12 +105,12 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIPMJkkNyixopJDKSmvkWcyfMjkhKAI4to5dC-8ot-cINWLlwXg4pLFmThXEtw-Q/exec"; 
+        const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw9rKH_KHDEl-STw0E1CoAL_xdqud4TMb22xccZFsNBN0xHY-pBQOCLYA3D6E8dzfgi/exec";
         let allProducts = [];
 
         async function loadStoreData() {
             try {
-                const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
+                const response = await fetch(GOOGLE_SHEET_URL + "?t=" + new Date().getTime());
                 const result = await response.json();
                 if (result.products) {
                     allProducts = result.products.reverse();

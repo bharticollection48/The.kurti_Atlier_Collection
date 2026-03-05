@@ -1,20 +1,27 @@
 // --- 1. CONFIGURATION ---
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIPMJkkNyixopJDKSmvkWcyfMjkhKAI4to5dC-8ot-cINWLlwXg4pLFmThXEtw-Q/exec";
-
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw9rKH_KHDEl-STw0E1CoAL_xdqud4TMb22xccZFsNBN0xHY-pBQOCLYA3D6E8dzfgi/exec";
 let allProducts = [];
 let currentData = [];
 
 /**
- * Page load hote hi data mangwane ki logic
+ * Page load hote hi data mangwane ki koshish karein
  */
 window.onload = async () => {
+    // 1. Loader dikhao jab tak data load na ho
     const grid = document.getElementById('productDisplay');
-    if (grid) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:#f3047c;"></i><p>Loading New Collection...</p></div>';
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:#9c27b0;"></i><p>Loading Products...</p></div>';
 
-    // Pehle wala data clear kar rahe hain taki koi confusion na ho
-    localStorage.removeItem('myProducts');
+    // 2. Pehle LocalStorage se purana data dikhao (Instant feel ke liye)
+    const localData = localStorage.getItem('myProducts');
+    if (localData) {
+        try {
+            allProducts = JSON.parse(localData);
+            currentData = [...allProducts];
+            render(allProducts);
+        } catch(e) { console.log("Cache error"); }
+    }
     
-    // Cloud se ekdum taaza data lao
+    // 3. Phir Cloud se ekdum taaza data lao
     await refreshData();
 };
 
@@ -23,7 +30,7 @@ window.onload = async () => {
  */
 async function refreshData() {
     try {
-        // Cache busting: Har baar naya time stamp taki server se naya data aaye
+        // Cache busting: t=Date.now() browser ko naya data lane par majboor karta hai
         const fetchUrl = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
         
         const response = await fetch(fetchUrl);
@@ -33,29 +40,31 @@ async function refreshData() {
         
         let freshProducts = [];
 
+        // Admin Panel format check: { products: [], settings: {} }
         if (result.products && Array.isArray(result.products)) {
             freshProducts = result.products;
+            
+            // Sync UPI and Password to LocalStorage
             if(result.settings) {
                 localStorage.setItem('ghabaUPI', result.settings.upi);
                 localStorage.setItem('adminPassword', result.settings.password);
             }
-        } else if (Array.isArray(result)) {
+        } 
+        // Agar result sirf ek array hai
+        else if (Array.isArray(result)) {
             freshProducts = result;
         }
 
         if (freshProducts.length > 0) {
-            // --- MAIN FIX ---
-            // Sheet mein naya product last mein hota hai, use top pe lane ke liye reverse()
-            allProducts = [...freshProducts].reverse(); 
+            allProducts = freshProducts;
             currentData = [...allProducts];
             
-            // Save in LocalStorage
+            // Store in LocalStorage for next visit
             localStorage.setItem('myProducts', JSON.stringify(allProducts));
-            
-            // Render to Screen
             render(allProducts); 
-            console.log("Success! Newest Products are on Top.");
+            console.log("Cloud Sync Successful. Total:", allProducts.length);
         } else {
+            // Agar sheet khali hai
             render([]);
         }
     } catch (error) {
@@ -65,22 +74,32 @@ async function refreshData() {
 }
 
 /**
- * Render Function
+ * Render Function (Design & UI)
  */
 function render(data) {
     const grid = document.getElementById('productDisplay');
     if (!grid) return;
 
     if (!data || data.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;"><h3>Stock Update Ho Raha Hai</h3></div>`;
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #888;">
+                <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 10px; color: #ccc;"></i>
+                <h3>Stock Update Ho Raha Hai</h3>
+                <p>Kripya thodi der mein check karein ya refresh karein.</p>
+            </div>`;
         return;
     }
 
     grid.innerHTML = '';
     
-    data.forEach(p => {
+    // Naye products hamesha upar dikhane ke liye reverse()
+    const displayData = [...data].reverse();
+
+    displayData.forEach(p => {
         const currentPrice = parseFloat(p.price) || 0;
-        const originalPrice = Math.round(currentPrice / 0.6); 
+        const originalPrice = Math.round(currentPrice * 1.4);
+        
+        // Multiple fallback for images
         let imgPath = p.mainImg || p.img || (p.gallery && p.gallery[0]) || 'https://via.placeholder.com/300?text=No+Image';
 
         grid.innerHTML += `
@@ -96,20 +115,19 @@ function render(data) {
                     <div class="price-container">
                         <span class="main-price">₹${currentPrice}</span>
                         <span class="old-price">₹${originalPrice}</span>
-                        <span class="discount-badge">40% OFF</span>
+                        <span class="discount-badge">30% OFF</span>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px;">
-                         <span class="rating-pill">4.5 <i class="fa-solid fa-star" style="font-size: 8px;"></i></span>
-                        <span style="font-size: 11px; color: #1aab2a; font-weight:bold;">Free Delivery</span>
+                         <span class="rating-pill">4.2 <i class="fa-solid fa-star" style="font-size: 8px;"></i></span>
+                        <span style="font-size: 11px; color: #00b894; font-weight:bold;">Free Delivery</span>
                     </div>
                 </div>
             </div>`;
     });
 }
 
-/**
- * UI Functions
- */
+// --- Filtering & UI Logic ---
+
 function searchProduct() {
     const val = document.getElementById('searchInput').value.toLowerCase();
     const filtered = allProducts.filter(p => 
@@ -127,10 +145,9 @@ function filterProducts(categoryName) {
 }
 
 function sortProducts(type) {
-    let sorted = [...currentData];
-    if (type === 'low') sorted.sort((a, b) => a.price - b.price);
-    else if (type === 'high') sorted.sort((a, b) => b.price - a.price);
-    else sorted = [...allProducts]; // Default is Newest
+    const sorted = [...currentData].sort((a, b) => 
+        type === 'low' ? a.price - b.price : b.price - a.price
+    );
     render(sorted);
 }
 
@@ -146,6 +163,9 @@ function updateCartBadge() {
     badge.style.display = cart.length > 0 ? "block" : "none";
 }
 
-function addToWishlist(id) { alert("Added to Wishlist! ❤️"); }
+function addToWishlist(id) {
+    alert("Wishlist mein add ho gaya! ❤️");
+}
 
+// Jab user doosre tab se wapas aaye toh data refresh karein
 window.onfocus = refreshData;
