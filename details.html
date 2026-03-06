@@ -3,201 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Kurti Atelier - Premium Collection</title>
+    <title>The Kurti Atelier - Luxe Collection</title>
     
     <link rel="icon" type="image/png" href="https://img.freepik.com/premium-vector/shopping-logo-vector-icon_636116-200.jpg?semt=ais_hybrid&w=740&q=80"> 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --primary: #f3047c; --dark: #1a1a1a; --light-bg: #fffafc; --green: #1aab2a; --wa-green: #25d366; --gold: #ffa502; --blue: #0984e3; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background: #fff; color: var(--dark); user-select: none; -webkit-tap-highlight-color: transparent; }
+        :root { 
+            --primary: #f3047c; 
+            --premium-black: #121212;
+            --glass: rgba(255, 255, 255, 0.8);
+            --gold: #d4af37;
+            --wa-green: #25d366; 
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            background: #f8f9fb; 
+            color: var(--premium-black); 
+            user-select: none; 
+            overflow-x: hidden;
+        }
+
+        /* Luxury Header */
+        header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 20px; background: var(--glass); 
+            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-name { 
+            font-family: 'Playfair Display', serif;
+            font-size: 18px; font-weight: 800; letter-spacing: 1px;
+            color: var(--premium-black); text-transform: uppercase;
+        }
+
+        /* Premium Gallery */
+        .gallery-section { background: white; padding-bottom: 20px; }
+        .main-img-box { 
+            width: 100%; height: 550px; background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        .main-img-box img { 
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease;
+        }
+
+        .thumb-row { 
+            display: flex; gap: 12px; padding: 0 20px; 
+            margin-top: -30px; position: relative; z-index: 10;
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .thumb-card { 
+            min-width: 70px; height: 70px; border-radius: 12px; 
+            border: 3px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden; cursor: pointer; transition: 0.3s;
+        }
+        .thumb-card.active { border-color: var(--primary); transform: scale(1.1); }
+
+        /* Content Styles */
+        .content-box { 
+            padding: 30px 20px; background: white; 
+            border-radius: 35px 35px 0 0; margin-top: -20px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
+        }
+
+        .price-container { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
+        .current-price { font-size: 32px; font-weight: 800; color: #000; }
+        .old-price { font-size: 18px; color: #999; text-decoration: line-through; }
+        .discount-tag { 
+            background: #fff0f6; color: var(--primary);
+            padding: 4px 12px; border-radius: 8px; font-weight: 700; font-size: 14px;
+        }
+
+        /* Selection Options */
+        .option-group { margin-bottom: 25px; }
+        .label { font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 15px; color: #666; display: block; }
         
-        /* Premium Header */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
-        
-        /* Image Gallery System */
-        .gallery-section { padding: 10px; background: #fff; }
-        .main-img-box { width: 100%; height: 500px; border-radius: 28px; overflow: hidden; background: #fdfdfd; display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; position: relative; cursor: crosshair; }
-        .main-img-box img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .main-img-box:hover img { transform: scale(1.1); }
-        
-        .thumb-row { display: flex; gap: 14px; margin-top: 18px; overflow-x: auto; padding: 5px; scrollbar-width: none; }
-        .thumb-row::-webkit-scrollbar { display: none; }
-        .thumb-card { min-width: 80px; height: 80px; border-radius: 16px; border: 2.5px solid #f2f2f2; overflow: hidden; cursor: pointer; flex-shrink: 0; transition: 0.3s; }
-        .thumb-card.active { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 6px 15px rgba(243, 4, 124, 0.2); }
-        .thumb-card img { width: 100%; height: 100%; object-fit: cover; }
+        /* Color Swatches */
+        .color-wrapper { display: flex; gap: 15px; }
+        .color-dot { 
+            width: 38px; height: 38px; border-radius: 50%; 
+            border: 2px solid white; box-shadow: 0 0 0 1px #eee;
+            cursor: pointer; position: relative; transition: 0.3s;
+        }
+        .color-dot.active { box-shadow: 0 0 0 2px var(--primary); }
+        .color-dot.active::after {
+            content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 12px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
 
-        .content-box { padding: 22px; }
-        
-        /* Trust Badges */
-        .badge-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-        .stock-tag { background: #fff4e5; color: #d35400; padding: 5px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-        .secure-tag { background: #e3f2fd; color: var(--blue); padding: 5px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+        /* Size Chips */
+        .size-wrapper { display: flex; gap: 10px; flex-wrap: wrap; }
+        .size-btn { 
+            padding: 10px 20px; border-radius: 12px; border: 1.5px solid #eee;
+            background: white; font-weight: 600; transition: 0.3s;
+        }
+        .size-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Offer Timer Feature */
-        .offer-banner { background: linear-gradient(90deg, #f3047c, #ff4d97); color: white; padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+        /* Stock Progress */
+        .stock-bar { height: 8px; background: #f0f0f0; border-radius: 10px; margin: 10px 0; overflow: hidden; }
+        .stock-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #ff75b5); width: 80%; }
 
-        .price-container { margin: 18px 0; display: flex; align-items: baseline; gap: 12px; }
-        .current-price { font-size: 34px; font-weight: 800; color: var(--dark); }
-        .old-price { font-size: 20px; color: #bbb; text-decoration: line-through; }
-        .off-tag { color: var(--green); font-size: 16px; font-weight: 700; }
+        /* Full Category Section */
+        .category-section { padding: 20px; background: #fff; }
+        .scroll-grid { 
+            display: flex; gap: 15px; overflow-x: auto; 
+            padding-bottom: 20px; scrollbar-width: none;
+        }
+        .product-card { 
+            min-width: 160px; background: #fff; border-radius: 15px; 
+            border: 1px solid #f2f2f2; overflow: hidden;
+        }
 
-        /* Progress Bar for Stock */
-        .stock-progress-container { margin: 15px 0; }
-        .stock-label { font-size: 12px; font-weight: 600; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .progress-bar { height: 6px; background: #eee; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--primary); width: 85%; border-radius: 10px; animation: slideIn 1.5s ease-out; }
-        @keyframes slideIn { from { width: 0; } to { width: 85%; } }
+        /* Bottom Bar */
+        .bottom-bar { 
+            position: fixed; bottom: 0; width: 100%; 
+            background: white; display: flex; padding: 15px 20px; 
+            gap: 12px; box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
+            z-index: 1000; box-sizing: border-box;
+        }
+        .btn-luxe { 
+            flex: 1; height: 55px; border-radius: 15px; border: none;
+            font-weight: 700; font-size: 15px; display: flex;
+            align-items: center; justify-content: center; gap: 8px; transition: 0.3s;
+        }
+        .btn-bag { background: #f8f8f8; color: #000; border: 1px solid #ddd; }
+        .btn-order { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(243, 4, 124, 0.2); }
 
-        /* Selection Options (Color & Size) */
-        .option-label { font-weight: 700; font-size: 15px; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
-        
-        .color-dot { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 1px #ddd; cursor: pointer; transition: 0.2s; position: relative; }
-        .color-dot.active { box-shadow: 0 0 0 2px var(--primary); transform: scale(1.1); }
-        .color-dot.active::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: white; font-size: 12px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .content-box > * { animation: fadeIn 0.6s ease forwards; }
 
-        .btn-size { border: 2px solid #f0f0f0; padding: 10px 18px; border-radius: 12px; background: white; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: inherit; }
-        .btn-size.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        /* Delivery & Trust Section */
-        .delivery-est { background: #fdfdfd; padding: 15px; border-radius: 15px; margin: 15px 0; border: 1px solid #eee; }
-        .delivery-item { display: flex; align-items: center; gap: 12px; font-size: 13px; margin-bottom: 8px; }
-        .delivery-item i { color: var(--green); font-size: 16px; }
-
-        .trust-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0; }
-        .trust-item { text-align: center; font-size: 9px; font-weight: 600; color: #666; line-height: 1.2; }
-        .trust-item i { display: block; font-size: 22px; color: var(--dark); margin-bottom: 8px; }
-
-        /* Floating WhatsApp */
-        #waFloatingBtn { position: fixed; bottom: 100px; right: 20px; background: var(--wa-green); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 8px 25px rgba(37,211,102,0.4); z-index: 999; text-decoration: none; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
-        /* Bottom Action Bar */
-        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 16px 20px; gap: 15px; box-shadow: 0 -10px 30px rgba(0,0,0,0.12); box-sizing: border-box; z-index: 1000; border-radius: 28px 28px 0 0; }
-        .btn { flex: 1; height: 60px; border: none; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
-        .btn-cart { background: #f8f9fa; color: var(--dark); border: 1px solid #eee; }
-        .btn-buy { background: var(--primary); color: white; box-shadow: 0 5px 18px rgba(243, 4, 124, 0.35); }
-
-        /* Loader */
-        #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
-        .spinner { width:45px; height:45px; border:5px solid #f3f3f3; border-top:5px solid var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform:rotate(360deg); } }
-        
-        .share-btn { width: 44px; height: 44px; border-radius: 15px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; }
+        #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
-    <div id="loader"><div class="spinner"></div><p style="margin-top:20px; font-weight:700; color:var(--primary); letter-spacing:2px;">THE KURTI ATELIER</p></div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="font-family: 'Playfair Display'; margin-top:20px; font-weight:700; color:var(--primary); letter-spacing:4px;">THE KURTI ATELIER</p>
+    </div>
 
     <header>
-        <div class="share-btn" onclick="goBack()"><i class="fa-solid fa-chevron-left"></i></div>
-        <div style="text-align: center;">
-            <div style="font-size: 15px; font-weight: 800; color: var(--dark); letter-spacing: 2px; text-transform: uppercase;">The Kurti Atelier</div>
-        </div>
-        <div class="share-btn" onclick="shareProduct()"><i class="fa-solid fa-share-nodes"></i></div>
+        <div class="share-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="brand-name">The Kurti Atelier</div>
+        <div class="share-btn" onclick="shareProduct()"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
     </header>
 
     <div class="gallery-section">
         <div class="main-img-box">
-            <img id="mainDisplay" src="" alt="Premium Collection">
+            <img id="mainDisplay" src="" alt="Luxe Kurti">
         </div>
         <div class="thumb-row" id="thumbRow"></div>
     </div>
 
     <div class="content-box">
-        <div class="offer-banner">
-            <span><i class="fa-solid fa-bolt"></i> Flash Sale: Limited Time Offer</span>
-            <span id="timer">14:59</span>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="color: var(--primary); font-weight: 700; font-size: 13px;"><i class="fa-solid fa-star"></i> TOP RATED LUXE</div>
+            <div style="font-size: 12px; color: #777;"><i class="fa-solid fa-eye"></i> 142 watching now</div>
         </div>
 
-        <div class="badge-row">
-            <div class="stock-tag"><i class="fa-solid fa-fire"></i> Best Seller</div>
-            <div class="secure-tag"><i class="fa-solid fa-shield-check"></i> Quality Guaranteed</div>
-        </div>
-        
-        <h1 id="pName" style="font-size: 24px; margin: 0; font-weight: 700; color: #111; line-height: 1.2;">Loading...</h1>
-        
-        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
-            <span style="background:var(--green); color:white; padding:3px 10px; border-radius:8px; font-size:13px; font-weight:800;">4.8 <i class="fa-solid fa-star" style="font-size: 10px;"></i></span>
-            <span style="color: #666; font-size: 13px;">Trusted by 5,000+ Customers</span>
-        </div>
+        <h1 id="pName" style="font-size: 26px; margin: 10px 0; font-family: 'Playfair Display', serif;">Loading Luxury...</h1>
 
         <div class="price-container">
             <span class="current-price" id="pPrice">₹0</span>
             <span class="old-price" id="pOld">₹0</span>
-            <span class="off-tag" id="pOff">40% OFF</span>
+            <span class="discount-tag" id="pOff">40% OFF</span>
         </div>
 
-        <div class="stock-progress-container">
-            <div class="stock-label">
-                <span style="color: #d35400;">Selling Fast! Only a few left</span>
-                <span>85% Sold</span>
+        <div class="option-group">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
+                <span style="color: #d35400;">HURRY! ONLY 4 LEFT IN STOCK</span>
+                <span>82% SOLD</span>
             </div>
-            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <div class="stock-bar"><div class="stock-fill"></div></div>
         </div>
 
-        <div id="colorArea">
-            <p class="option-label"><i class="fa-solid fa-palette"></i> Select Color:</p>
-            <div id="colorOptions" style="display:flex; gap:15px;">
-                <div class="color-dot active" style="background: #f3047c;" onclick="selectColor(this, 'Pink')"></div>
-                <div class="color-dot" style="background: #1a1a1a;" onclick="selectColor(this, 'Black')"></div>
-                <div class="color-dot" style="background: #0984e3;" onclick="selectColor(this, 'Blue')"></div>
-                <div class="color-dot" style="background: #f1c40f;" onclick="selectColor(this, 'Gold')"></div>
-            </div>
-        </div>
-
-        <div id="sizeArea" style="display:none;">
-            <p class="option-label"><i class="fa-solid fa-ruler-combined"></i> Select Size:</p>
-            <div id="sizeOptions" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
-        </div>
-
-        <div class="delivery-est">
-            <div class="delivery-item">
-                <i class="fa-solid fa-truck-fast"></i>
-                <span>Fast Shipping Available</span>
-            </div>
-            <div class="delivery-item">
-                <i class="fa-solid fa-credit-card"></i>
-                <span>Secure Online Payment</span>
-            </div>
-            <div class="delivery-item" style="margin-bottom: 0;">
-                <i class="fa-solid fa-calendar-check"></i>
-                <span>Delivery by <b id="deliveryDate">Updating...</b></span>
+        <div class="option-group">
+            <span class="label">Select Color</span>
+            <div class="color-wrapper">
+                <div class="color-dot active" style="background: #f3047c;" onclick="selectColor(this, 'Rose Pink')"></div>
+                <div class="color-dot" style="background: #1a1a1a;" onclick="selectColor(this, 'Midnight Black')"></div>
+                <div class="color-dot" style="background: #2d5a27;" onclick="selectColor(this, 'Emerald Green')"></div>
+                <div class="color-dot" style="background: #0984e3;" onclick="selectColor(this, 'Royal Blue')"></div>
             </div>
         </div>
 
-        <div class="trust-row">
-            <div class="trust-item"><i class="fa-solid fa-award"></i>Premium<br>Quality</div>
-            <div class="trust-item"><i class="fa-solid fa-lock"></i>Secure<br>Payment</div>
-            <div class="trust-item"><i class="fa-solid fa-rotate"></i>Easy<br>Exchange</div>
-            <div class="trust-item"><i class="fa-solid fa-hand-holding-heart"></i>Ethically<br>Made</div>
+        <div id="sizeArea" class="option-group" style="display:none;">
+            <span class="label">Select Size</span>
+            <div id="sizeOptions" class="size-wrapper"></div>
         </div>
 
-        <div style="background: var(--light-bg); padding: 20px; border-radius: 24px; margin: 25px 0; border: 1px solid rgba(243, 4, 124, 0.15);">
-            <h4 style="margin: 0 0 15px 0; font-size: 16px; color: var(--primary); font-weight: 800; text-transform: uppercase;">Product Specifications</h4>
-            <table style="width: 100%; font-size: 14px; border-spacing: 0 10px;">
-                <tr><td style="color:#666;">Designer</td><td style="font-weight:700; text-align:right;">The Kurti Atelier</td></tr>
-                <tr><td style="color:#666;">Collection</td><td style="font-weight:700; text-align:right;" id="pCat">Fashion</td></tr>
-                <tr><td style="color:#666;">Material</td><td style="font-weight:700; text-align:right;">Handpicked Fabric</td></tr>
-                <tr><td style="color:#666;">Work</td><td style="font-weight:700; text-align:right;">Premium Finish</td></tr>
-            </table>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0;">
+            <div style="background: #fdfdfd; padding: 15px; border-radius: 15px; border: 1px solid #eee;">
+                <i class="fa-solid fa-truck-fast" style="color: var(--gold);"></i>
+                <div style="font-size: 12px; font-weight: 700; margin-top: 5px;">FREE DELIVERY</div>
+                <div style="font-size: 10px; color: #999;">On this premium order</div>
+            </div>
+            <div style="background: #fdfdfd; padding: 15px; border-radius: 15px; border: 1px solid #eee;">
+                <i class="fa-solid fa-rotate-left" style="color: var(--gold);"></i>
+                <div style="font-size: 12px; font-weight: 700; margin-top: 5px;">EASY EXCHANGE</div>
+                <div style="font-size: 10px; color: #999;">7-day doorstep pickup</div>
+            </div>
         </div>
     </div>
 
-    <div style="padding: 20px; background: #fafafa; margin-bottom: 120px;">
-        <h4 style="margin-bottom: 20px; font-weight: 800; font-size: 18px;">Recommended For You</h4>
-        <div id="relatedGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;"></div>
+    <div class="category-section">
+        <h3 style="font-family: 'Playfair Display'; margin-bottom: 20px;">More from this Category</h3>
+        <div id="relatedGrid" class="scroll-grid">
+            </div>
     </div>
 
-    <a id="waFloatingBtn" href="https://wa.me/917851053736" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <div style="height: 120px;"></div>
+
+    <a id="waFloatingBtn" href="#" target="_blank" style="display:none;"></a>
 
     <div class="bottom-bar">
-        <button class="btn btn-cart" id="addToCartBtn"><i class="fa-solid fa-basket-shopping"></i> BAG</button>
-        <button class="btn btn-buy" id="buyNowBtn"><i class="fa-solid fa-bolt-lightning"></i> ORDER NOW</button>
+        <button class="btn-luxe btn-bag" id="addToCartBtn"><i class="fa-solid fa-bag-shopping"></i> BAG</button>
+        <button class="btn-luxe btn-order" id="buyNowBtn"><i class="fa-solid fa-bolt"></i> BUY NOW</button>
     </div>
 
     <script>
@@ -206,27 +235,10 @@
         const productId = params.get('id');
         let currentProduct = null;
         let selectedSize = "";
-        let selectedColor = "Pink"; // Default Color
+        let selectedColor = "Rose Pink";
 
-        // Timer Function
-        let time = 899;
-        setInterval(() => {
-            let min = Math.floor(time / 60);
-            let sec = time % 60;
-            document.getElementById('timer').innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-            if(time > 0) time--;
-        }, 1000);
+        function goBack() { window.history.back(); }
 
-        // Delivery Date
-        const d = new Date();
-        d.setDate(d.getDate() + 6);
-        document.getElementById('deliveryDate').innerText = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
-
-        function goBack() {
-            window.history.length > 1 ? window.history.back() : window.location.href = 'index.html';
-        }
-
-        // Color Selection Function
         function selectColor(el, color) {
             document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
             el.classList.add('active');
@@ -238,33 +250,26 @@
             try {
                 const response = await fetch(GOOGLE_SHEET_URL + "?t=" + Date.now());
                 const data = await response.json();
-                const allProducts = (data.products || data).sort((a, b) => Number(b.id) - Number(a.id));
+                const allProducts = data.products || data;
                 localStorage.setItem('myProducts', JSON.stringify(allProducts));
+                
                 currentProduct = allProducts.find(x => String(x.id) === String(productId));
 
                 if (currentProduct) {
                     renderProduct(currentProduct, allProducts);
-                    updateWhatsAppLink(currentProduct);
                     document.getElementById('loader').style.display = 'none';
-                } else {
-                    window.location.href = "index.html";
                 }
             } catch (e) {
-                const cached = JSON.parse(localStorage.getItem('myProducts'));
-                if(cached && (currentProduct = cached.find(x => String(x.id) === String(productId)))) {
-                    renderProduct(currentProduct, cached);
-                    document.getElementById('loader').style.display = 'none';
-                }
+                console.error("Load Error", e);
             }
         }
 
         function renderProduct(product, allProducts) {
             document.getElementById('pName').innerText = product.name;
             document.getElementById('pPrice').innerText = '₹' + product.price;
-            document.getElementById('pCat').innerText = product.category || "Premium Boutique";
             document.getElementById('pOld').innerText = '₹' + Math.round(product.price / 0.6);
-
-            const photos = [product.mainImg, ...(product.gallery || [])].filter(Boolean).slice(0, 6);
+            
+            const photos = [product.mainImg, ...(product.gallery || [])].filter(Boolean);
             document.getElementById('mainDisplay').src = photos[0];
 
             photos.forEach((src, i) => {
@@ -279,16 +284,17 @@
                 document.getElementById('thumbRow').appendChild(thumb);
             });
 
+            // Sizes
             const cat = (product.category || "").toUpperCase();
             if(['KURTIS', 'SAREE', 'WESTERN', 'DRESS'].some(el => cat.includes(el))) {
                 document.getElementById('sizeArea').style.display = 'block';
                 const sizes = cat.includes('SAREE') ? ["Free Size"] : ["S", "M", "L", "XL", "XXL"];
                 sizes.forEach(sz => {
                     const btn = document.createElement('button');
-                    btn.className = "btn-size";
+                    btn.className = "size-btn";
                     btn.innerText = sz;
                     btn.onclick = () => {
-                        document.querySelectorAll('.btn-size').forEach(b => b.classList.remove('active'));
+                        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
                         selectedSize = sz;
                         updateWhatsAppLink(product);
@@ -297,40 +303,42 @@
                 });
             }
 
-            allProducts.filter(p => p.category === product.category && p.id != product.id).slice(0, 4).forEach(sp => {
-                const item = document.createElement('div');
-                item.style.cssText = "background:white; border-radius:20px; overflow:hidden; border:1px solid #f0f0f0; cursor:pointer;";
-                item.onclick = () => window.location.href = `details.html?id=${sp.id}`;
-                item.innerHTML = `<img src="${sp.mainImg}" style="width:100%; height:180px; object-fit:cover;"><div style="padding:12px;"><div style="font-size:12px; font-weight:600;">${sp.name}</div><div style="color:var(--primary); font-weight:800; font-size:16px;">₹${sp.price}</div></div>`;
-                document.getElementById('relatedGrid').appendChild(item);
+            // LOAD ALL PRODUCTS FROM SAME CATEGORY
+            const related = allProducts.filter(p => p.category === product.category && p.id != product.id);
+            const grid = document.getElementById('relatedGrid');
+            
+            if(related.length === 0) {
+                document.querySelector('.category-section').style.display = 'none';
+            }
+
+            related.forEach(sp => {
+                const div = document.createElement('div');
+                div.className = "product-card";
+                div.onclick = () => window.location.href = `details.html?id=${sp.id}`;
+                div.innerHTML = `
+                    <img src="${sp.mainImg}" style="width:100%; height:180px; object-fit:cover;">
+                    <div style="padding:10px;">
+                        <div style="font-size:11px; font-weight:700; height:32px; overflow:hidden;">${sp.name}</div>
+                        <div style="color:var(--primary); font-weight:800; margin-top:5px;">₹${sp.price}</div>
+                    </div>
+                `;
+                grid.appendChild(div);
             });
+
+            updateWhatsAppLink(product);
         }
 
         function updateWhatsAppLink(product) {
-            const sizeText = selectedSize ? `\n📏 साइज: ${selectedSize}` : "";
-            const colorText = `\n🎨 कलर: ${selectedColor}`;
-            const text = encodeURIComponent(`नमस्ते The Kurti Atelier! 👋\n\nमुझे यह ऑर्डर करना है:\n🛍️ नाम: ${product.name}\n💰 कीमत: ₹${product.price}${colorText}${sizeText}\n🔗 लिंक: ${window.location.href}\n\nकृपया पेमेंट की जानकारी दें।`);
-            document.getElementById('waFloatingBtn').href = `https://wa.me/917851053736?text=${text}`;
+            const sizeMsg = selectedSize ? `\n📏 साइज: ${selectedSize}` : "";
+            const text = encodeURIComponent(`नमस्ते The Kurti Atelier! 👋\n\nमुझे यह प्रीमियम कुर्ती पसंद आई है:\n🛍️ नाम: ${product.name}\n🎨 कलर: ${selectedColor}${sizeMsg}\n💰 कीमत: ₹${product.price}\n\nकृपया मेरा ऑर्डर कन्फर्म करें।`);
+            document.getElementById('buyNowBtn').onclick = () => {
+                if(document.getElementById('sizeArea').style.display === "block" && !selectedSize) {
+                    alert("कृपया अपना साइज चुनें ✨");
+                    return;
+                }
+                window.location.href = `https://wa.me/917851053736?text=${text}`;
+            };
         }
-
-        function shareProduct() {
-            if (navigator.share) navigator.share({ title: document.getElementById('pName').innerText, url: window.location.href });
-            else { navigator.clipboard.writeText(window.location.href); alert("लिंक कॉपी हो गया!"); }
-        }
-
-        document.getElementById('addToCartBtn').onclick = () => {
-            if (document.getElementById('sizeArea').style.display === "block" && !selectedSize) { alert("कृपया साइज चुनें!"); return; }
-            let cart = JSON.parse(localStorage.getItem('myCart')) || [];
-            cart.push({...currentProduct, selectedSize, selectedColor});
-            localStorage.setItem('myCart', JSON.stringify(cart));
-            alert("बैग में जोड़ दिया गया! 🛒");
-        };
-
-        document.getElementById('buyNowBtn').onclick = () => {
-            if (document.getElementById('sizeArea').style.display === "block" && !selectedSize) { alert("कृपया साइज चुनें!"); return; }
-            localStorage.setItem('buyNowItem', JSON.stringify({...currentProduct, selectedSize, selectedColor}));
-            window.location.href = 'address.html';
-        };
 
         init();
     </script>
