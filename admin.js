@@ -1,5 +1,5 @@
 // --- 1. CONFIGURATION ---
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyIPMJkkNyixopJDKSmvkWcyfMjkhKAI4to5dC-8ot-cINWLlwXg4pLFmThXEtw-Q/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw9rKH_KHDEl-STw0E1CoAL_xdqud4TMb22xccZFsNBN0xHY-pBQOCLYA3D6E8dzfgi/exec";
 const IMGBB_API_KEY = "9ee7440c835d66e8df057ca7e92ce285"; 
 
 // --- 2. Server se Settings Fetch Karna ---
