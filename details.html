@@ -3,83 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Product Details - Al Akasha Elvy</title>
+    <title>The Kurti Atelier - Premium Collection</title>
     
     <link rel="icon" type="image/png" href="https://img.freepik.com/premium-vector/shopping-logo-vector-icon_636116-200.jpg?semt=ais_hybrid&w=740&q=80"> 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --primary: #f3047c; --dark: #1a1a1a; --light-bg: #fdf2ff; --green: #1aab2a; --wa-green: #25d366; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background: #fff; color: var(--dark); user-select: none; }
+        :root { --primary: #f3047c; --dark: #1a1a1a; --light-bg: #fffafc; --green: #1aab2a; --wa-green: #25d366; --gold: #ffa502; --blue: #0984e3; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: #fff; color: var(--dark); user-select: none; -webkit-tap-highlight-color: transparent; }
         
+        /* Premium Header */
         header { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
         
-        .gallery-section { padding: 8px; background: #fff; }
-        .main-img-box { width: 100%; height: 460px; border-radius: 20px; overflow: hidden; background: #fefefe; display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; position: relative; }
-        .main-img-box img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s; }
+        /* Image Gallery System */
+        .gallery-section { padding: 10px; background: #fff; }
+        .main-img-box { width: 100%; height: 500px; border-radius: 28px; overflow: hidden; background: #fdfdfd; display: flex; align-items: center; justify-content: center; border: 1px solid #f0f0f0; position: relative; cursor: crosshair; }
+        .main-img-box img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .main-img-box:hover img { transform: scale(1.1); }
         
-        .thumb-row { display: flex; gap: 12px; margin-top: 15px; overflow-x: auto; padding: 5px; scrollbar-width: none; }
+        .thumb-row { display: flex; gap: 14px; margin-top: 18px; overflow-x: auto; padding: 5px; scrollbar-width: none; }
         .thumb-row::-webkit-scrollbar { display: none; }
-        .thumb-card { min-width: 75px; height: 75px; border-radius: 12px; border: 2px solid #f0f0f0; overflow: hidden; cursor: pointer; flex-shrink: 0; }
-        .thumb-card.active { border-color: var(--primary); transform: translateY(-3px); }
+        .thumb-card { min-width: 80px; height: 80px; border-radius: 16px; border: 2.5px solid #f2f2f2; overflow: hidden; cursor: pointer; flex-shrink: 0; transition: 0.3s; }
+        .thumb-card.active { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 6px 15px rgba(243, 4, 124, 0.2); }
         .thumb-card img { width: 100%; height: 100%; object-fit: cover; }
 
         .content-box { padding: 22px; }
-        .stock-tag { background: #e8f5e9; color: var(--green); padding: 5px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
         
-        .price-container { margin: 18px 0; display: flex; align-items: center; gap: 15px; }
-        .current-price { font-size: 30px; font-weight: 800; color: var(--dark); }
-        .old-price { font-size: 19px; color: #aaa; text-decoration: line-through; }
-        .off-tag { background: #ff4757; color: white; font-size: 14px; font-weight: 700; padding: 5px 12px; border-radius: 8px; }
+        /* Trust Badges */
+        .badge-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .stock-tag { background: #fff4e5; color: #d35400; padding: 5px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+        .secure-tag { background: #e3f2fd; color: var(--blue); padding: 5px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
 
-        .trust-row { display: flex; justify-content: space-between; margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 15px; }
-        .trust-item { text-align: center; font-size: 10px; font-weight: 600; color: #666; }
-        .trust-item i { display: block; font-size: 18px; color: var(--dark); margin-bottom: 5px; }
+        .price-container { margin: 18px 0; display: flex; align-items: baseline; gap: 12px; }
+        .current-price { font-size: 34px; font-weight: 800; color: var(--dark); }
+        .old-price { font-size: 20px; color: #bbb; text-decoration: line-through; }
+        .off-tag { color: var(--green); font-size: 16px; font-weight: 700; }
 
-        .btn-size { border: 1.5px solid #eee; padding: 10px 20px; border-radius: 10px; background: white; cursor: pointer; font-weight: 600; }
-        .btn-size.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* Delivery & Trust Section */
+        .delivery-est { background: #fdfdfd; padding: 15px; border-radius: 15px; margin: 15px 0; border: 1px solid #eee; }
+        .delivery-item { display: flex; align-items: center; gap: 12px; font-size: 13px; margin-bottom: 8px; }
+        .delivery-item i { color: var(--green); font-size: 16px; }
 
-        #waFloatingBtn { position: fixed; bottom: 95px; right: 20px; background: var(--wa-green); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 6px 20px rgba(37,211,102,0.4); z-index: 999; text-decoration: none; }
+        .trust-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0; }
+        .trust-item { text-align: center; font-size: 9px; font-weight: 600; color: #666; line-height: 1.2; }
+        .trust-item i { display: block; font-size: 22px; color: var(--dark); margin-bottom: 8px; }
 
-        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 14px; gap: 12px; box-shadow: 0 -8px 25px rgba(0,0,0,0.08); box-sizing: border-box; z-index: 1000; border-radius: 20px 20px 0 0; }
-        .btn { flex: 1; height: 58px; border: none; border-radius: 15px; font-weight: 800; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-cart { background: #f1f2f6; color: var(--dark); }
-        .btn-buy { background: var(--primary); color: white; }
+        /* Sizes */
+        .btn-size { border: 2px solid #f0f0f0; padding: 12px 20px; border-radius: 14px; background: white; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-size.active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); }
 
+        /* Floating WhatsApp */
+        #waFloatingBtn { position: fixed; bottom: 100px; right: 20px; background: var(--wa-green); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 8px 25px rgba(37,211,102,0.4); z-index: 999; text-decoration: none; animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Bottom Action Bar */
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 16px 20px; gap: 15px; box-shadow: 0 -10px 30px rgba(0,0,0,0.12); box-sizing: border-box; z-index: 1000; border-radius: 28px 28px 0 0; }
+        .btn { flex: 1; height: 60px; border: none; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .btn-cart { background: #f8f9fa; color: var(--dark); border: 1px solid #eee; }
+        .btn-buy { background: var(--primary); color: white; box-shadow: 0 5px 18px rgba(243, 4, 124, 0.35); }
+
+        /* Loader */
         #loader { position: fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
         .spinner { width:45px; height:45px; border:5px solid #f3f3f3; border-top:5px solid var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
-        .share-btn { width: 42px; height: 42px; border-radius: 12px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; }
+        @keyframes spin { 0% { transform:rotate(360deg); } }
+        
+        .share-btn { width: 44px; height: 44px; border-radius: 15px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-    <div id="loader"><div class="spinner"></div><p style="margin-top:20px; font-weight:600; color:var(--primary);">PREMIUM COLLECTION...</p></div>
+    <div id="loader"><div class="spinner"></div><p style="margin-top:20px; font-weight:700; color:var(--primary); letter-spacing:2px;">THE KURTI ATELIER</p></div>
 
     <header>
         <div class="share-btn" onclick="goBack()"><i class="fa-solid fa-chevron-left"></i></div>
         <div style="text-align: center;">
-            <div style="font-size: 15px; font-weight: 800; color: var(--dark); letter-spacing: 1.5px; text-transform: uppercase;">Al Akasha Elvy</div>
+            <div style="font-size: 15px; font-weight: 800; color: var(--dark); letter-spacing: 2px; text-transform: uppercase;">The Kurti Atelier</div>
         </div>
-        <div class="share-btn" onclick="shareProduct()"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+        <div class="share-btn" onclick="shareProduct()"><i class="fa-solid fa-share-nodes"></i></div>
     </header>
 
     <div class="gallery-section">
         <div class="main-img-box">
-            <img id="mainDisplay" src="" alt="Premium Item">
+            <img id="mainDisplay" src="" alt="Premium Collection">
         </div>
         <div class="thumb-row" id="thumbRow"></div>
     </div>
 
     <div class="content-box">
-        <div class="stock-tag"><i class="fa-solid fa-bolt-lightning"></i> Fast Selling - Limited Stock</div>
+        <div class="badge-row">
+            <div class="stock-tag"><i class="fa-solid fa-clock"></i> Limited Edition</div>
+            <div class="secure-tag"><i class="fa-solid fa-shield-check"></i> 100% Quality Assurance</div>
+        </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 10px;">
-            <h1 id="pName" style="font-size: 20px; margin: 0; font-weight: 600;">Loading...</h1>
-            <div style="background:var(--green); color:white; padding:3px 10px; border-radius:8px; font-size:13px; font-weight:800;">
-                4.5 <i class="fa-solid fa-star" style="font-size: 10px;"></i>
-            </div>
+        <h1 id="pName" style="font-size: 24px; margin: 0; font-weight: 700; color: #111; line-height: 1.2;">Loading Item...</h1>
+        
+        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+            <span style="background:var(--green); color:white; padding:3px 10px; border-radius:8px; font-size:13px; font-weight:800;">4.8 <i class="fa-solid fa-star" style="font-size: 10px;"></i></span>
+            <span style="color: #666; font-size: 13px;">Trusted by 5,000+ Customers</span>
         </div>
 
         <div class="price-container">
@@ -88,31 +110,47 @@
             <span class="off-tag" id="pOff">OFF</span>
         </div>
 
+        <div class="delivery-est">
+            <div class="delivery-item">
+                <i class="fa-solid fa-truck-fast"></i>
+                <span>Fast Express Shipping Available</span>
+            </div>
+            <div class="delivery-item">
+                <i class="fa-solid fa-credit-card"></i>
+                <span>Secure Online Payment Only</span>
+            </div>
+            <div class="delivery-item" style="margin-bottom: 0;">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Delivery by <b id="deliveryDate">Updating...</b></span>
+            </div>
+        </div>
+
+        <div id="sizeArea" style="display:none; margin: 25px 0;">
+            <p style="font-weight: 700; font-size: 15px; margin-bottom: 15px;">Choose Your Size:</p>
+            <div id="sizeOptions" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+        </div>
+
         <div class="trust-row">
-            <div class="trust-item"><i class="fa-solid fa-truck-fast"></i>Free Delivery</div>
-            <div class="trust-item"><i class="fa-solid fa-rotate-left"></i>7 Day Return</div>
-            <div class="trust-item"><i class="fa-solid fa-shield-check"></i>Verified</div>
-            <div class="trust-item"><i class="fa-solid fa-hand-holding-dollar"></i>COD</div>
+            <div class="trust-item"><i class="fa-solid fa-award"></i>Premium<br>Quality</div>
+            <div class="trust-item"><i class="fa-solid fa-lock"></i>Secure<br>Payment</div>
+            <div class="trust-item"><i class="fa-solid fa-rotate"></i>Easy<br>Exchange</div>
+            <div class="trust-item"><i class="fa-solid fa-hand-holding-heart"></i>Ethically<br>Made</div>
         </div>
 
-        <div id="sizeArea" style="display:none; margin: 20px 0;">
-            <p style="font-weight: 700; font-size: 14px; margin-bottom: 10px;">Select Size:</p>
-            <div id="sizeOptions" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
-        </div>
-
-        <div style="background: var(--light-bg); padding: 15px; border-radius: 15px; margin: 20px 0;">
-            <h4 style="margin: 0 0 10px 0; font-size: 14px; color: var(--primary);">Product Details</h4>
-            <table style="width: 100%; font-size: 13px;">
-                <tr><td style="color:#777;">Brand</td><td style="font-weight:700; text-align:right;">Al Akasha Elvy</td></tr>
-                <tr><td style="color:#777;">Category</td><td style="font-weight:700; text-align:right;" id="pCat">Fashion</td></tr>
-                <tr><td style="color:#777;">Wash Care</td><td style="font-weight:700; text-align:right;">Hand Wash</td></tr>
+        <div style="background: var(--light-bg); padding: 20px; border-radius: 24px; margin: 25px 0; border: 1px solid rgba(243, 4, 124, 0.15);">
+            <h4 style="margin: 0 0 15px 0; font-size: 16px; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Product Specifications</h4>
+            <table style="width: 100%; font-size: 14px; border-spacing: 0 10px;">
+                <tr><td style="color:#666;">Designer</td><td style="font-weight:700; text-align:right;">The Kurti Atelier</td></tr>
+                <tr><td style="color:#666;">Collection</td><td style="font-weight:700; text-align:right;" id="pCat">Fashion</td></tr>
+                <tr><td style="color:#666;">Material</td><td style="font-weight:700; text-align:right;">Handpicked Fabric</td></tr>
+                <tr><td style="color:#666;">Work</td><td style="font-weight:700; text-align:right;">Premium Finish</td></tr>
             </table>
         </div>
     </div>
 
-    <div style="padding: 20px; background: #fbfbfb; margin-bottom: 110px;">
-        <h4 style="margin-bottom: 15px;">Related Products</h4>
-        <div id="relatedGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"></div>
+    <div style="padding: 20px; background: #fafafa; margin-bottom: 120px;">
+        <h4 style="margin-bottom: 20px; font-weight: 800; font-size: 18px;">Recommended For You</h4>
+        <div id="relatedGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;"></div>
     </div>
 
     <a id="waFloatingBtn" href="https://wa.me/917851053736" target="_blank">
@@ -121,32 +159,29 @@
 
     <div class="bottom-bar">
         <button class="btn btn-cart" id="addToCartBtn"><i class="fa-solid fa-basket-shopping"></i> BAG</button>
-        <button class="btn btn-buy" id="buyNowBtn"><i class="fa-solid fa-bolt-lightning"></i> BUY NOW</button>
+        <button class="btn btn-buy" id="buyNowBtn"><i class="fa-solid fa-bolt-lightning"></i> ORDER NOW</button>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw9rKH_KHDEl-STw0E1CoAL_xdqud4TMb22xccZFsNBN0xHY-pBQOCLYA3D6E8dzfgi/exec";
         const params = new URLSearchParams(window.location.search);
         const productId = params.get('id');
         let currentProduct = null;
         let selectedSize = "";
 
-        // Navigation
-        window.history.pushState({ path: window.location.href }, '', window.location.href);
-        window.onpopstate = () => goBack();
+        // Delivery Date Calculation
+        const d = new Date();
+        d.setDate(d.getDate() + 6);
+        document.getElementById('deliveryDate').innerText = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+
         function goBack() {
-            (document.referrer === "" || document.referrer.indexOf(window.location.host) === -1) 
-            ? window.location.href = 'index.html' : window.history.back();
+            window.history.length > 1 ? window.history.back() : window.location.href = 'index.html';
         }
 
         async function init() {
             try {
-                // Fetch Data (GOOGLE_SHEET_URL used correctly here)
                 const response = await fetch(GOOGLE_SHEET_URL + "?t=" + Date.now());
                 const data = await response.json();
-                
-                // Latest First sorting (Same as index)
                 const allProducts = (data.products || data).sort((a, b) => Number(b.id) - Number(a.id));
                 localStorage.setItem('myProducts', JSON.stringify(allProducts));
                 
@@ -157,41 +192,34 @@
                     updateWhatsAppLink(currentProduct);
                     document.getElementById('loader').style.display = 'none';
                 } else {
-                    alert("Product Not Found!");
                     window.location.href = "index.html";
                 }
             } catch (e) {
-                console.error("Error:", e);
-                // Try to load from cache if network fails
                 const cached = JSON.parse(localStorage.getItem('myProducts'));
-                if(cached){
-                    currentProduct = cached.find(x => String(x.id) === String(productId));
-                    if(currentProduct) {
-                        renderProduct(currentProduct, cached);
-                        document.getElementById('loader').style.display = 'none';
-                        return;
-                    }
+                if(cached && (currentProduct = cached.find(x => String(x.id) === String(productId)))) {
+                    renderProduct(currentProduct, cached);
+                    document.getElementById('loader').style.display = 'none';
+                } else {
+                    alert("Network Error! Please check connection.");
                 }
-                alert("Network Connection Error!");
             }
         }
 
         function renderProduct(product, allProducts) {
             document.getElementById('pName').innerText = product.name;
             document.getElementById('pPrice').innerText = '₹' + product.price;
-            document.getElementById('pCat').innerText = product.category || "Premium";
+            document.getElementById('pCat').innerText = product.category || "Premium Boutique";
             
-            const discount = 40; 
-            const oldPrice = Math.round(product.price / (1 - discount/100));
+            const oldPrice = Math.round(product.price / 0.6);
             document.getElementById('pOld').innerText = '₹' + oldPrice;
-            document.getElementById('pOff').innerText = discount + "% OFF";
+            document.getElementById('pOff').innerText = "40% OFF";
 
-            // Gallery Setup
-            const allPhotos = [product.mainImg, ...(product.gallery || [])].filter(url => url && String(url).trim() !== "");
-            const uniquePhotos = [...new Set(allPhotos)].slice(0, 7);
-            document.getElementById('mainDisplay').src = uniquePhotos[0];
+            // Gallery Logic
+            const galleryArr = Array.isArray(product.gallery) ? product.gallery : [];
+            const photos = [product.mainImg, ...galleryArr].filter(Boolean).slice(0, 6);
+            document.getElementById('mainDisplay').src = photos[0];
 
-            uniquePhotos.forEach((src, i) => {
+            photos.forEach((src, i) => {
                 const thumb = document.createElement('div');
                 thumb.className = `thumb-card ${i === 0 ? 'active' : ''}`;
                 thumb.innerHTML = `<img src="${src}">`;
@@ -203,10 +231,9 @@
                 document.getElementById('thumbRow').appendChild(thumb);
             });
 
-            // Size Selection Logic
+            // Size Logic
             const cat = (product.category || "").toUpperCase();
-            const sizeTrigger = ['SAREE', 'KURTIS', 'KURTIS & DRESS', 'WESTERN', 'DRESS'];
-            if(sizeTrigger.some(el => cat.includes(el))) {
+            if(['KURTIS', 'SAREE', 'WESTERN', 'DRESS'].some(el => cat.includes(el))) {
                 document.getElementById('sizeArea').style.display = 'block';
                 const sizes = cat.includes('SAREE') ? ["Free Size"] : ["S", "M", "L", "XL", "XXL"];
                 sizes.forEach(sz => {
@@ -223,30 +250,27 @@
                 });
             }
 
-            // Related Grid
-            const similar = allProducts.filter(p => p.category === product.category && p.id != product.id).slice(0, 4);
-            similar.forEach(sp => {
+            // Related Products
+            allProducts.filter(p => p.category === product.category && p.id != product.id).slice(0, 4).forEach(sp => {
                 const item = document.createElement('div');
-                item.className = 'rel-item';
-                item.style.cssText = "background:white; border-radius:12px; overflow:hidden; border:1px solid #eee; cursor:pointer;";
+                item.style.cssText = "background:white; border-radius:20px; overflow:hidden; border:1px solid #f0f0f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor:pointer;";
                 item.onclick = () => window.location.href = `details.html?id=${sp.id}`;
                 item.innerHTML = `
-                    <img src="${sp.mainImg}" style="width:100%; height:150px; object-fit:cover;">
-                    <div style="padding:8px;">
-                        <div style="font-size:11px; font-weight:600; height:30px; overflow:hidden;">${sp.name}</div>
-                        <div style="color:var(--primary); font-weight:800; font-size:14px;">₹${sp.price}</div>
+                    <img src="${sp.mainImg}" style="width:100%; height:180px; object-fit:cover;">
+                    <div style="padding:12px;">
+                        <div style="font-size:12px; font-weight:600; color:#333; height:34px; overflow:hidden;">${sp.name}</div>
+                        <div style="color:var(--primary); font-weight:800; font-size:16px; margin-top:5px;">₹${sp.price}</div>
                     </div>`;
                 document.getElementById('relatedGrid').appendChild(item);
             });
         }
 
         function updateWhatsAppLink(product) {
-            const waBtn = document.getElementById('waFloatingBtn');
-            const sizeInfo = selectedSize ? `\n📏 Size: ${selectedSize}` : "";
+            const sizeText = selectedSize ? `\n📏 साइज: ${selectedSize}` : "";
             const text = encodeURIComponent(
-                `नमस्ते Al Akasha Elvy! 👋\n\nमुझे यह पसंद है:\n🛍️ नाम: ${product.name}\n💰 कीमत: ₹${product.price}${sizeInfo}\n🔗 लिंक: ${window.location.href}`
+                `नमस्ते The Kurti Atelier! 👋\n\nमुझे यह ऑर्डर करना है:\n🛍️ नाम: ${product.name}\n💰 कीमत: ₹${product.price}${sizeText}\n🔗 लिंक: ${window.location.href}\n\nकृपया पेमेंट की जानकारी भेजें।`
             );
-            waBtn.href = `https://wa.me/917851053736?text=${text}`;
+            document.getElementById('waFloatingBtn').href = `https://wa.me/917851053736?text=${text}`;
         }
 
         function shareProduct() {
@@ -254,25 +278,20 @@
                 navigator.share({ title: document.getElementById('pName').innerText, url: window.location.href });
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                alert("Link Copied!");
+                alert("लिंक कॉपी हो गया! 🔗");
             }
         }
 
         document.getElementById('addToCartBtn').onclick = () => {
-            if (document.getElementById('sizeArea').style.display === "block" && !selectedSize) { 
-                alert("Please select Size! 📏"); return; 
-            }
+            if (document.getElementById('sizeArea').style.display === "block" && !selectedSize) { alert("कृपया साइज चुनें! 📏"); return; }
             let cart = JSON.parse(localStorage.getItem('myCart')) || [];
             cart.push({...currentProduct, selectedSize});
-            localStorage.setItem('myProducts', JSON.stringify(cart)); // Keeping cache updated
             localStorage.setItem('myCart', JSON.stringify(cart));
-            alert("Added to Bag! 🛒");
+            alert("बैग में जोड़ दिया गया! 🛒");
         };
 
         document.getElementById('buyNowBtn').onclick = () => {
-            if (document.getElementById('sizeArea').style.display === "block" && !selectedSize) { 
-                alert("Please select Size! 📏"); return; 
-            }
+            if (document.getElementById('sizeArea').style.display === "block" && !selectedSize) { alert("कृपया साइज चुनें! 📏"); return; }
             localStorage.setItem('buyNowItem', JSON.stringify({...currentProduct, selectedSize}));
             window.location.href = 'address.html';
         };
